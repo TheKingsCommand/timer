@@ -193,13 +193,12 @@
         var dif = t2 - t1;
         var h = Math.trunc(dif/3600000) % 24; //now.getHours() - start.getHours(); //today.getHours();
         var m = Math.trunc(dif/60000) % 60; //now.getMinutes() - start.getMinutes();
-        var s = Math.trunc(dif/1000) % 60; //now.getSeconds()- start.getSeconds();
-        var ms = dif % 1000; //now.getMilliseconds() - start.getMilliseconds();
+        var s = Math.trunc(dif%60000) * 1000; //now.getSeconds()- start.getSeconds();
         h = checkTime(h);
         m = checkTime(m);
         s = checkTime(s);
         ms = checkTime(ms)
-        var ret = h + ":" + m + ":" + s + ":" + ms;
+        var ret = h + ":" + m + ":" + s;
         return ret;
       }
       function checkTime(i){
