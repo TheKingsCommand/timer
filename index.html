@@ -91,7 +91,7 @@
       <div id="timer"></div>
       <br>
       <div class="box" id="lapname">
-        Lap Name: <input type="text" name="lapinput" id="lapinput" value="lap1">
+        Lap Name: <input type="text" name="lapinput" id="lapinput" value=" ">
       </div>
       <br>
       <br>
@@ -114,10 +114,13 @@
       var script;
       var start;
       var stop;
-//      var laps;​
       function setup(){
         var urlParams = new URLSearchParams(window.location.search);
         //started not stopped
+        if(!urlParams.has('start')){
+            var now = new Date();
+            document.getElementById('timer').innerHTML = printTime(now.getTime(), now.getTime());
+        }
         if(urlParams.has('start')&&(!urlParams.has('stop'))){
           console.log(urlParams.get('start'));
           var x = document.getElementById("start");
@@ -128,9 +131,7 @@
           z.style.display = "inline";
           var z = document.getElementById("lapname");
           z.style.display = "inline";
-          //start = new Date(1571017935199);
           start = new Date(parseInt(urlParams.get('start')));
-          //start(urlParams.get('start'));
           update();
         }
         //stopped
@@ -143,7 +144,6 @@
           z.style.display = "none";
           var z = document.getElementById("lapname");
           z.style.display = "none";
-          //start = new Date(1571017935199);
           document.getElementById('timer').innerHTML = printTime(parseInt(urlParams.get('start')), parseInt(urlParams.get('stop')));
         }
         //Print ALL
@@ -191,24 +191,31 @@
       }
       function printTime(t1, t2){
         var dif = t2 - t1;
-        var h = Math.trunc(dif/3600000) % 24; //now.getHours() - start.getHours(); //today.getHours();
-        var m = Math.trunc(dif/60000) % 60; //now.getMinutes() - start.getMinutes();
-        var s = Math.trunc(dif%60000) * 1000; //now.getSeconds()- start.getSeconds();
+        var h = Math.trunc(dif/3600000) % 24;
+        var m = Math.trunc(dif/60000) % 60;
+        var s = Math.trunc(dif/1000) % 60;
+        var ms = dif % 1000;
         h = checkTime(h);
         m = checkTime(m);
         s = checkTime(s);
-        ms = checkTime(ms)
-        var ret = h + ":" + m + ":" + s;
+        ms = checktime2(ms);
+        var ret = h + ":" + m + ":" + s + '.' + ms;
         return ret;
       }
       function checkTime(i){
         if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
         return i;
       }
+      function checktime2(i){
+          if (i < 100) {i = "0" + checkTime(i)};
+          return i;
+      }
       //https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
-      function updateQuery(key, val){
+      function updateQuery(key, val, kill=false){
+        var searchParams;
         if ('URLSearchParams' in window) {
-          var searchParams = new URLSearchParams(window.location.search);
+          if(kill) searchParams = new URLSearchParams();
+          else searchParams = new URLSearchParams(window.location.search);
           searchParams.set(key, val);
           var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
           location.href = newRelativePathQuery;
@@ -232,8 +239,7 @@
         navigator.clipboard.writeText(window.location.href).then(function() {
           alert("URL copied to clipboard");
         }, function() {
-          /* clipboard write failed */
-          alert("Failed to copy URL. To share please copy url manually.");
+          alert("Failed to copy URL. To share please copy URL manually.");
         });
       }
     </script>
