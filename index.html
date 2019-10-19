@@ -59,8 +59,15 @@
         .sharebutton:hover {
             background-color: #b8cecd;
         }
+        .mainbox {
+            width: 100vw;
+            max-width: 500px;
+            height: auto;
+            padding: 10px;
+            border: 1px solid black;
+            box-sizing: border-box;
+        }
         .box {
-
             width: 300px;
             height: 45px;
             padding: 10px;
@@ -69,7 +76,7 @@
             display: none;
         }
         .eventsbox {
-            width: 500px;
+            width: 100%;
             height: auto;
             border: 1px solid black;
             box-sizing: border-box;
@@ -82,30 +89,30 @@
     </head>
     <body>
         <h1>Time Share</h1>
-        <div id="price-usd">
-        </div>
-        <form>
-            <button class="button" type="reset" id="start" onclick="doit('start')">START</button>
-            <button class="redbutton" type="reset" id="stop" onclick="doit('stop')">STOP</button>
-            <button class="lapbutton" type="reset" id="lap" onclick="doit('lapname')">LAP</button>
-            <br> <br>
-            <div id="timer"></div>
-            <br>
-            <div class="box" id="lapname">
-                Lap Name: <input type="text" name="lapinput" id="lapinput" value="input lap value here">
-            </div>
-            <br>
-            <br>
-            <div id="event" class="event">
-                Events:
-                <div class="eventsbox" id="events">
-                    <ul id="eventslist"></ul>
+        <div class="mainbox">
+            <form>
+                <button class="button" type="reset" id="start" onclick="doit('start')">START</button>
+                <button class="redbutton" type="reset" id="stop" onclick="doit('stop')">STOP</button>
+                <button class="lapbutton" type="reset" id="lap" onclick="doit('lapname')">LAP</button>
+                <br> <br>
+                <div id="timer"></div>
+                <br>
+                <div class="box" id="lapname">
+                    Lap Name: <input type="text" name="lapinput" id="lapinput" value="input lap value here">
                 </div>
-            </div>
-            <br>
-            <button class="sharebutton" type="button" id="copy" onclick="copyit()">SHARE</button>
-            <body onload="setup()">
-        </form>
+                <br>
+                <br>
+                <div id="event" class="event">
+                    Events:
+                    <div class="eventsbox" id="events">
+                        <ul id="eventslist"></ul>
+                    </div>
+                </div>
+                <br>
+                <button class="sharebutton" type="button" id="copy" onclick="copyit()">SHARE</button>
+                <body onload="setup()">
+            </form>
+        </div>
         <p id="forcefeed"></p>
         <p id="demo2"></p>
         <p id="gittoken"> </p>
@@ -212,7 +219,7 @@
         }
         //https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
         function updateQuery(key, val, kill=false){
-            val = val - start.getTime(); 
+            val = val - start.getTime();
             var searchParams;
             if ('URLSearchParams' in window) {
             if(kill){searchParams = new URLSearchParams()}
