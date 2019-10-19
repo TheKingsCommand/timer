@@ -119,7 +119,7 @@
             //started not stopped
             if(!urlParams.has('start')){
                 var now = new Date();
-                document.getElementById('timer').innerHTML = printTime(now.getTime(), now.getTime());
+                document.getElementById('timer').innerHTML = printTime(now.getTime() - now.getTime());
             }
             if(urlParams.has('start')&&(!urlParams.has('stop'))){
                 console.log(urlParams.get('start'));
@@ -159,7 +159,7 @@
                         list = pair[0] + ': ' + started.toString();
                     }
                     else{
-                        list = pair[0] + ': ' + printTime(started.getTime(), parseInt(pair[1]));
+                        list = pair[0] + ': ' + printTime(parseInt(pair[1]));
                     }
                     updateList(list);
                 }
@@ -170,8 +170,8 @@
         var laps = 0;
         function doit(origin){
             var temp;
-            start = new Date();
-            temp = start.getTime();
+            var temptime = new Date();
+            temp = temptime.getTime();
             if(origin == 'lapname'){
                 laps ++;
                 origin = document.getElementById('lapinput').value;
@@ -186,11 +186,11 @@
         function update(){
             //initiate time
             var now = new Date();
-            document.getElementById('timer').innerHTML = printTime(start.getTime(), now.getTime())
+            document.getElementById('timer').innerHTML = printTime(now.getTime() - start.getTime());
             var t = setTimeout(update, 10);
         }
-        function printTime(t1, t2){
-            var dif = t2 - t1;
+        function printTime(dif){
+            //var dif = t2 - t1;
             var h = Math.trunc(dif/3600000) % 24;
             var m = Math.trunc(dif/60000) % 60;
             var s = Math.trunc(dif/1000) % 60;
@@ -212,6 +212,7 @@
         }
         //https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
         function updateQuery(key, val, kill=false){
+            val = val - start.getTime(); 
             var searchParams;
             if ('URLSearchParams' in window) {
             if(kill){searchParams = new URLSearchParams()}
