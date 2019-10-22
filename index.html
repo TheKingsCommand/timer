@@ -6,6 +6,7 @@
         <meta charset="utf-8">
         <style>
         .button {
+            margin: auto;
             background-color: #4CAF50;
             border: none;
             color: white;
@@ -19,6 +20,7 @@
             background-color: green;
         }
         .redbutton {
+            margin: auto;
             background-color: #e0115f;
             border: none;
             color: white;
@@ -33,6 +35,7 @@
             background-color: red;
         }
         .lapbutton {
+            margin: auto;
             background-color: #0f52ba;
             border: none;
             color: white;
@@ -77,9 +80,11 @@
             display: none;
         }
         .timer {
+            margin: auto;
+            height: auto;
             width: 100%;
             height: 45%;
-            font-size: 4vw;
+            font-size:100vw;
         }
         .eventsbox {
             width: 100%;
@@ -96,12 +101,12 @@
     <body>
         <div class="mainbox">
             <h1>Time Share</h1>
+            <p id="timer">""</p>
             <form>
                 <button class="button" type="reset" id="start" onclick="doit('start')">START</button>
                 <button class="redbutton" type="reset" id="stop" onclick="doit('stop')">STOP</button>
                 <button class="lapbutton" type="reset" id="lap" onclick="doit('lapname')">LAP</button>
                 <br> <br>
-                <div id="timer"></div>
                 <br>
                 <div class="box" id="lapname">
                     Lap Name: <input type="text" name="lapinput" id="lapinput" value="input lap value here">
@@ -119,143 +124,169 @@
                 <body onload="setup()">
             </form>
         </div>
-        <p id="forcefeed"></p>
-        <p id="demo2"></p>
-        <p id="gittoken"> </p>
-        <p id="gituser"> </p>
         <script>
-        var script;
-        var start;
-        var stop;
-        function setup(){
-            var urlParams = new URLSearchParams(window.location.search);
-            //started not stopped
-            if(!urlParams.has('start')){
-                var now = new Date();
-                document.getElementById('timer').innerHTML = printTime(now.getTime() - now.getTime());
-            }
-            if(urlParams.has('start')&&(!urlParams.has('stop'))){
-                console.log(urlParams.get('start'));
-                var x = document.getElementById("start");
-                x.style.display = "none";
-                var y = document.getElementById("stop");
-                y.style.display = "inline";
-                var z = document.getElementById("lap");
-                z.style.display = "inline";
-                var z = document.getElementById("lapname");
-                z.style.display = "inline";
-                start = new Date(parseInt(urlParams.get('start')));
-                update();
-            }
-            //stopped
-            if(urlParams.has('start')&&urlParams.has('stop')){
-                var x = document.getElementById("start");
-                x.style.display = "inline";
-                var y = document.getElementById("stop");
-                y.style.display = "none";
-                var z = document.getElementById("lap");
-                z.style.display = "none";
-                var z = document.getElementById("lapname");
-                z.style.display = "none";
-                document.getElementById('timer').innerHTML = printTime(parseInt(urlParams.get('start')), parseInt(urlParams.get('stop')));
-            }
-            //Print ALL
-            if('URLSearchParams' in window){
-                //not start or stop
-                var list = "";
-                var count = 0;
-                var started;
-                for(var pair of urlParams.entries()) {
-                    count ++;
-                    if(pair[0]=='start'){
-                        started = new Date(parseInt(pair[1]));
-                        list = pair[0] + ': ' + started.toString();
-                    }
-                    else{
-                        list = pair[0] + ': ' + printTime(parseInt(pair[1]));
-                    }
-                    updateList(list);
+            var script;
+            var start;
+            var stop;
+            function setup()
+            {
+                var urlParams = new URLSearchParams(window.location.search);
+                //started not stopped
+                if(!urlParams.has('start'))
+                {
+                    var now = new Date();
+                    document.getElementById('timer').innerHTML = printTime(now.getTime() - now.getTime());
                 }
-                //set lapname value
-                document.getElementById('lapinput').value = 'lap ' + count;
+                if(urlParams.has('start')&&(!urlParams.has('stop')))
+                {
+                    console.log(urlParams.get('start'));
+                    var x = document.getElementById("start");
+                    x.style.display = "none";
+                    var y = document.getElementById("stop");
+                    y.style.display = "inline";
+                    var z = document.getElementById("lap");
+                    z.style.display = "inline";
+                    var z = document.getElementById("lapname");
+                    z.style.display = "inline";
+                    start = new Date(parseInt(urlParams.get('start')));
+                    update();
+                }
+                //stopped
+                if(urlParams.has('start')&&urlParams.has('stop'))
+                {
+                    var x = document.getElementById("start");
+                    x.style.display = "inline";
+                    var y = document.getElementById("stop");
+                    y.style.display = "none";
+                    var z = document.getElementById("lap");
+                    z.style.display = "none";
+                    var z = document.getElementById("lapname");
+                    z.style.display = "none";
+                    document.getElementById('timer').innerHTML = printTime(parseInt(urlParams.get('stop')));
+                }
+                //Print ALL
+                if('URLSearchParams' in window)
+                {
+                    //not start or stop
+                    var list = "";
+                    var count = 0;
+                    var started;
+                    for(var pair of urlParams.entries()) 
+                    {
+                        count ++;
+                        if(pair[0]=='start')
+                        {
+                            started = new Date(parseInt(pair[1]));
+                            list = pair[0] + ': ' + started.toString();
+                        }
+                        else
+                        {
+                            list = pair[0] + ': ' + printTime(parseInt(pair[1]));
+                        }
+                        updateList(list);
+                    }
+                    //set lapname value
+                    document.getElementById('lapinput').value = 'lap ' + count;
+                }
             }
-        }
-        var laps = 0;
-        function doit(origin){
-            var temp;
-            var temptime = new Date();
-            temp = temptime.getTime();
-            if(origin == 'lapname'){
-                laps ++;
-                origin = document.getElementById('lapinput').value;
+            var laps = 0;
+            function doit(origin)
+            {
+                var temp;
+                var temptime = new Date();
+                temp = temptime.getTime();
+                if(origin == 'lapname')
+                {
+                    laps ++;
+                    origin = document.getElementById('lapinput').value;
+                }
+                if(origin == 'start')
+                {
+                    restartQuery(origin, temp);
+                }
+                else
+                {
+                    updateQuery(origin, temp);
+                }
             }
-            if(origin == 'start'){
-                restartQuery(origin, temp);
+            function update()
+            {
+                //initiate time
+                var now = new Date();
+                document.getElementById('timer').innerHTML = printTime(now.getTime() - start.getTime());
+                var t = setTimeout(update, 10);
             }
-            else{
-                updateQuery(origin, temp);
+            function printTime(dif)
+            {
+                //var dif = t2 - t1;
+                var h = Math.trunc(dif/3600000) % 24;
+                var m = Math.trunc(dif/60000) % 60;
+                var s = Math.trunc(dif/1000) % 60;
+                var ms = dif % 1000;
+                h = checkTime(h);
+                m = checkTime(m);
+                s = checkTime(s);
+                ms = checktime2(ms);
+                var ret = h + ":" + m + ":" + s + '.' + ms;
+                return ret;
             }
-        }
-        function update(){
-            //initiate time
-            var now = new Date();
-            document.getElementById('timer').innerHTML = printTime(now.getTime() - start.getTime());
-            var t = setTimeout(update, 10);
-        }
-        function printTime(dif){
-            //var dif = t2 - t1;
-            var h = Math.trunc(dif/3600000) % 24;
-            var m = Math.trunc(dif/60000) % 60;
-            var s = Math.trunc(dif/1000) % 60;
-            var ms = dif % 1000;
-            h = checkTime(h);
-            m = checkTime(m);
-            s = checkTime(s);
-            ms = checktime2(ms);
-            var ret = h + ":" + m + ":" + s + '.' + ms;
-            return ret;
-        }
-        function checkTime(i){
-            if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-            return i;
-        }
-        function checktime2(i){
-            if (i < 100) {i = "0" + checkTime(i)};
-            return i;
-        }
-        //https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
-        function updateQuery(key, val, kill=false){
-            val = val - start.getTime();
-            var searchParams;
-            if ('URLSearchParams' in window) {
-            if(kill){searchParams = new URLSearchParams()}
-            else{searchParams = new URLSearchParams(window.location.search)}
-            searchParams.set(key, val);
-            var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-            location.href = newRelativePathQuery;
+            function checkTime(i)
+            {
+                if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+                return i;
             }
-        }
-        function restartQuery(key, val){
-            if ('URLSearchParams' in window) {
-            var searchParams = new URLSearchParams();
-            searchParams.set(key, val);
-            var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-            location.href = newRelativePathQuery;
+            function checktime2(i)
+            {
+                if (i < 100) {i = "0" + checkTime(i)};
+                return i;
             }
-        }
-        function updateList(thread){
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(thread);
-            node.appendChild(textnode);
-            document.getElementById("eventslist").appendChild(node);
-        }
-        function copyit() {
-            navigator.clipboard.writeText(window.location.href).then(function() {
-                alert("URL copied to clipboard");
-            }, function() {
-                alert("Failed to copy URL. To share please copy URL manually.");
-            });
-        }
+            //https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
+            function updateQuery(key, val, kill=false)
+            {
+                val = val - start.getTime();
+                var searchParams;
+                if ('URLSearchParams' in window) {
+                    if(kill)
+                    {
+                        searchParams = new URLSearchParams()
+                    }
+                    else
+                    {
+                        searchParams = new URLSearchParams(window.location.search)
+                    }
+                searchParams.set(key, val);
+                var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+                location.href = newRelativePathQuery;
+                }
+            }
+            function restartQuery(key, val)
+            {
+                if ('URLSearchParams' in window) 
+                {
+                    var searchParams = new URLSearchParams();
+                    searchParams.set(key, val);
+                    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+                    location.href = newRelativePathQuery;
+                }
+            }
+            function updateList(thread)
+            {
+                var node = document.createElement("LI");
+                var textnode = document.createTextNode(thread);
+                node.appendChild(textnode);
+                document.getElementById("eventslist").appendChild(node);
+            }
+            function copyit() 
+            {
+                navigator.clipboard.writeText(window.location.href).then(function() 
+                {
+                    alert("URL copied to clipboard");
+                }, function() 
+                {
+                    alert("Failed to copy URL. To share please copy URL manually.");
+                });
+            }
         </script>
     </body>
 </html>
+
